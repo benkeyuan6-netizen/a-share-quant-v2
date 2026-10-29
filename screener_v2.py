@@ -10,7 +10,9 @@ import pandas as pd
 
 
 def stock_pool():
-    df = ak.stock_info_a_code_name()
+    df = ak.stock_zh_a_spot()
+    df = df.rename(columns={'代码': 'code', '名称': 'name'})
+    df['code'] = df['code'].astype(str).str.replace(r'^(sh|sz)', '', regex=True)
     if not {'code', 'name'}.issubset(df.columns):
         raise ValueError(f'股票列表字段变化: {list(df.columns)}')
     df = df[['code', 'name']].copy()
